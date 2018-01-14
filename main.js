@@ -1,6 +1,7 @@
 // load express
 var express = require('express');
 var favicon = require('serve-favicon')
+var moment = require('moment');
 var path = require('path')
 var bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
@@ -27,7 +28,7 @@ const sequelize = new Sequelize('d1kh27c8o2l0fs', 'otnvrlqgbycpkc', 'de77ec57a12
 
 const Sample = sequelize.define('sample', {
     data: {
-      type: Sequelize.DATEONLY
+      type: Sequelize.DATE
     },
     latitude: {
       type: Sequelize.FLOAT
@@ -43,35 +44,10 @@ const Sample = sequelize.define('sample', {
 sequelize
   .authenticate()
   .then(() => {
-    console.log('Connection has been established successfully.');
-
-      // force: true will drop the table if it already exists
-    Sample.sync({force: false}).then(() => {
-        // Table created
-        Sample.create({
-            data: '2018-01-07',
-            latitude: -25.45,
-            longitude: -49.26,
-            amplitude: 70.8
-        });
-
-        Sample.create({
-            data: '2018-01-07',
-            latitude: -25.45,
-            longitude: -49.28,
-            amplitude: 85.7
-        });
-
-        Sample.create({
-            data: '2018-01-07',
-            latitude: -25.45,
-            longitude: -49.29,
-            amplitude: 80.1
-        });
-  }); 
+    console.log('DB: Connection has been established successfully.');
   })
   .catch(err => {
-    console.error('Unable to connect to the database:', err);
+    console.error('DB: Unable to connect to the database:', err);
   });
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -107,12 +83,51 @@ var listener = app.listen(process.env.PORT || 3000, function () {
 });
 
 //API
-app.post('/testPassword', function(req, res){
-    if(req.body.password == 'Iamerror' || req.body.password == 'Irlanda')
-        res.json({ ok: 1 });
-    else
-        res.json({ ok: 0 });
+app.post('/receiveData', function(req, res){
+
+    //Os dados vem em formato JSON, portanto, podemos usar os componentes direto!
+    console.log('New data arrived at ' + new Date().toLocaleString());
+    
+    //Checar se todas as propriedades estão no lugar
+    var attributes = ['timestamp', 'lat', 'long', 'value'];
+
+    if(!CheckNewDataAttribute(attributes, req.body)){
+        res.send('bad_data');
+        return;
+    }
+    else{
+        res.send('ok');
+        console.log('ts: ' + req.body.timestamp);
+        console.log('lat/long: ' + req.body.lat + '/' + req.body.long);
+        console.log('value: ' + req.body.value);
+    }
+
+    //Save in DB
+    Sample.sync({force: false}).then(() => {
+        // Table created
+        Sample.create({
+            data: moment(req.body.timestamp, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'),
+            latitude: req.body.lat,
+            longitude: req.body.long,
+            amplitude: req.body.value
+        });
+    });
 });
+
+function CheckNewDataAttribute(attributesNames, obj)
+{
+    var result = true;
+
+    attributesNames.forEach(function(attrName){
+        if(!obj.hasOwnProperty(attrName))
+        {
+            console.log('Missing parameter: ' + attrName);
+            result = false;
+        }
+    });
+
+    return result;
+}
 
 app.get('*', (req, res) => {
     if (req.accepts('html')) {
