@@ -114,20 +114,12 @@ app.post('/receiveData', function(req, res){
     });
 });
 
-function CheckNewDataAttribute(attributesNames, obj)
-{
-    var result = true;
-
-    attributesNames.forEach(function(attrName){
-        if(!obj.hasOwnProperty(attrName))
-        {
-            console.log('Missing parameter: ' + attrName);
-            result = false;
-        }
-    });
-
-    return result;
-}
+const CheckNewDataAttribute = (attributesNames, obj) => attributesNames.map(t => { 
+    var b = obj.hasOwnProperty(t);
+    if (!b)
+        console.log('Missing parameter: ' + t);
+    return b;
+}).reduce((a,b) => a && b);
 
 app.get('*', (req, res) => {
     if (req.accepts('html')) {
