@@ -5,7 +5,7 @@ var markers = [];
 function CreateMarkers(mapData)
 {
     mapData.forEach(element => {
-        AddMarker(element.lat, element.long, element.dB);
+        AddMarker(element.latitude, element.longitude, element.amplitude);
     });
 }
 
