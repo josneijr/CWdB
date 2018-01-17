@@ -82,7 +82,30 @@ var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('App listening on port ' + listener.address().port);
 });
 
-//API
+//Pegar dados em um intervalo
+app.post('/getInterval', function(req, res){
+
+    console.log('New date request: ' + Object.keys(req.body));
+
+    if(req.body.initialDate == null)
+    {
+        res.send('Missing initial date');    
+    }
+
+    if(req.body.finalDate == null)
+    {
+        res.send('Missing final date');    
+    }
+
+    var initialDate = moment(req.body.initialDate, 'DD/MM/YYYY HH:mm:ss').toDate();
+    var endDate = moment(req.body.finalDate, 'DD/MM/YYYY HH:mm:ss').toDate();
+
+    console.log('New date request: ' + initialDate.toLocaleString() + ' to ' + endDate.toLocaleString());
+
+    res.send('ok');
+});
+
+//Middleware
 app.post('/receiveData', function(req, res){
 
     //Os dados vem em formato JSON, portanto, podemos usar os componentes direto!

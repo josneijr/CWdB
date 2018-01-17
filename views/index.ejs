@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>CWdB - SOBRE</title>
+        <title>CWdB</title>
 
         <% include partials/head %>
 
@@ -11,15 +11,15 @@
 
         <!-- Include Date Range Picker -->
         <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 
         <script type="text/javascript" src="index_map.js"></script>
         
-
         <link rel="stylesheet" href="index.css">
 
     </head>
 
-    <body class="hold-transition skin-blue layout-top-nav">
+    <body class="hold-transition skin-blue layout-top-nav" onload="UpdateSamples()">
         
         <% include partials/header %>
         
@@ -34,7 +34,7 @@
                             <i class="fa fa-calendar"></i>
                         </div>
                         <div class="col-xs-10">
-                            <input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
+                            <input type="text" id="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
                         </div>
                     </div>
 
@@ -48,7 +48,7 @@
         
         </div>
         
-        <!-- SCRIPTS DO MAPA -->
+        <!-- START: SCRIPTS DO MAPA -->
         <script>
 
             function myMap()
@@ -62,35 +62,43 @@
                 }
         
                 map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-                var samples = [
-                    {lat: -25.45, long: -49.26, dB: 40}, 
-                    {lat: -25.45, long: -49.27, dB: 100}, 
-                    {lat: -25.45, long: -49.28, dB: 150}
-                ];
-
-                CreateMarkers(samples);
-                CreateHeatMap(samples);
-            }
-        
+            }        
         </script>
         
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2NrBR3ZlTLNT0jFm8-FooJAKxTjPTRgs&callback=myMap&libraries=visualization"></script>
-               
-        <!-- SCRIPTS DO DATE/TIME PICKER -->
+        <!-- END: SCRIPTS DO MAPA -->
+
+        <!-- START: SCRIPTS DO DATE/TIME PICKER -->
         <script>
-            $('input[name="daterange"]').daterangepicker({
+            var startDate = new Date();
+
+            startDate.setHours(startDate.getHours() - 24);
+
+            $('#daterange').daterangepicker({
                 timePicker: true,
                 timePicker24Hour: true,
                 timePickerIncrement: 1,
+                startDate: startDate,
+                endDate: new Date(),
                 locale: {
-                    format: 'DD/MM/YYYY hh:mm'
+                    format: 'DD/MM/YYYY HH:mm'
                 }
             });
+
+            $('#daterange').on('apply.daterangepicker', function(ev, picker) {
+                console.log(picker.startDate.format('YYYY-MM-DD'));
+                console.log(picker.endDate.format('YYYY-MM-DD'));                                
+            });            
         </script>        
+        <!-- END: SCRIPTS DO DATE/TIME PICKER -->
 
+        <!-- START: UPDATE MAP SAMPLES -->
+        <script type="text/javascript" src="index_updateSamples.js"></script>
+        <!-- END: UPDATE MAP SAMPLES -->
+
+        <!-- START: SCRIPTS GERAIS -->
         <script type="text/javascript" src="index_callbacks.js"></script>
-
+        <!-- END: SCRIPTS GERAIS -->
     </body>
 
 </html>
