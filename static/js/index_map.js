@@ -14,7 +14,7 @@ function CreateHeatMap(mapData)
     var heatMapData = [];
 
     mapData.forEach(element => {
-        heatMapData.push({location: new google.maps.LatLng(element.lat, element.long), weight: element.dB});
+        heatMapData.push({location: new google.maps.LatLng(element.latitude, element.longitude), weight: element.amplitude});
         console.log(heatMapData);
     });
 

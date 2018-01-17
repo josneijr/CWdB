@@ -20,11 +20,11 @@ function UpdateSamples(){
 
             console.log('Ajax success: ' + samples);  
 
-            //CreateMarkers(samples);
-            //CreateHeatMap(samples);
+            CreateMarkers(samples);
+            CreateHeatMap(samples);
         },
-        error: function(result) {
-            console.log('Ajax error: ' + result);  
+        error: function(error) {
+            console.log('Ajax error on getting data');  
         }
     });               
 }

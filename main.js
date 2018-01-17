@@ -5,6 +5,7 @@ var moment = require('moment');
 var path = require('path')
 var bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 var app = express();
 // Or you can simply use a connection uri
@@ -18,7 +19,7 @@ const sequelize = new Sequelize('d1kh27c8o2l0fs', 'otnvrlqgbycpkc', 'de77ec57a12
       },
 
     pool: {
-      max: 5,
+      max: 14,
       min: 0,
       acquire: 30000,
       idle: 10000
@@ -85,24 +86,52 @@ var listener = app.listen(process.env.PORT || 3000, function () {
 //Pegar dados em um intervalo
 app.post('/getInterval', function(req, res){
 
-    console.log('New date request: ' + Object.keys(req.body));
+    var attributes = ['initialDate', 'finalDate'];
 
-    if(req.body.initialDate == null)
-    {
-        res.send('Missing initial date');    
+    if(!CheckNewDataAttribute(attributes, req.body)){
+        res.error('{"message": "bad_data"}');
+        return;
     }
-
-    if(req.body.finalDate == null)
-    {
-        res.send('Missing final date');    
+    else{
+        console.log('New date range request! From ' + 
+                    req.body.initialDate.toLocaleString() + 
+                    ' until ' + 
+                    req.body.finalDate.toLocaleString());                    
     }
 
     var initialDate = moment(req.body.initialDate, 'DD/MM/YYYY HH:mm:ss').toDate();
     var endDate = moment(req.body.finalDate, 'DD/MM/YYYY HH:mm:ss').toDate();
 
-    console.log('New date request: ' + initialDate.toLocaleString() + ' to ' + endDate.toLocaleString());
+    Sample.findAll({ 
+        where: {
+            data:{
+                [Op.gte]: initialDate,
+                [Op.lte]: endDate
+            }
+        } 
+        })
+        .then(response => {
 
-    res.send('ok');
+            var objArray = [];
+
+            response.forEach(function(e){
+                var newObj = {
+                    timestamp: e.get('data'),
+                    latitude: e.get('latitude'),
+                    longitude: e.get('longitude'),
+                    amplitude: e.get('amplitude')
+                };
+
+                console.log(newObj);
+
+                objArray.push(newObj);
+            });
+
+            res.send(JSON.stringify(objArray));
+        })
+        .catch({
+
+        })
 });
 
 //Middleware
