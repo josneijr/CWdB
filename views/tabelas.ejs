@@ -5,6 +5,8 @@
 
         <% include partials/head %>
         
+        <link rel="stylesheet" href="admin-lte/css/slider.css">  
+
         <link rel="stylesheet" href="tabelas.css">
 
     </head>
@@ -20,6 +22,29 @@
             <div class="col-lg-2" style="margin-bottom: 15px; padding-top: 15px; margin-left: -100px">
                 <input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" style="color: black; width: 300px" />
             </div>
+
+
+            <div class="col-lg-1 col-lg-offset-9 slider slider-horizontal" id="green">
+                <div class="slider-track">
+                    <div class="slider-track-low" style="left: 0px; width: 43.75%;"></div>
+                    <div class="slider-selection" style="left: 43.75%; width: 31.25%;"></div>
+                    <div class="slider-track-high" style="right: 0px; width: 25%;"></div>
+                    <div class="slider-handle min-slider-handle round" role="slider" aria-valuemin="-200" aria-valuemax="200" aria-valuenow="-25" style="left: 43.75%;" tabindex="0"></div>
+                    <div class="slider-handle max-slider-handle round" role="slider" aria-valuemin="-200" aria-valuemax="200" aria-valuenow="100" style="left: 75%;" tabindex="0"></div>
+                </div>
+                <div class="tooltip tooltip-main top" role="presentation" style="left: 59.375%; margin-left: -31.5px;">
+                    <div class="tooltip-arrow"></div>
+                    <div class="tooltip-inner">-25 : 100</div>
+                </div>
+                <div class="tooltip tooltip-min top" role="presentation" style="left: 43.75%; margin-left: 0px; display: none;">
+                    <div class="tooltip-arrow"></div>
+                    <div class="tooltip-inner">-25</div>
+                </div>
+                <div class="tooltip tooltip-max top" role="presentation" style="left: 75%; margin-left: 0px; display: none;">
+                    <div class="tooltip-arrow"></div>
+                    <div class="tooltip-inner">100</div>
+                </div>
+            </div>            
         </div>
         
         <div class="row">
@@ -114,7 +139,9 @@
         
                 chart.draw(data, options);
             }
-        </script>        
+        </script>  
+        
+        <script src="admin-lte/js/bootstrap-slider.js"></script>
 
     </body>
 

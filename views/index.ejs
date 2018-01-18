@@ -26,6 +26,7 @@
         <div id="map" class="col-xs-12"></div>
         
         <div id="over_map">
+
             <div class="box box-solid bg-green-gradient">
                 <div class="box-header ui-sortable-handle">
                     
@@ -47,6 +48,19 @@
             </div>
         
         </div>
+
+        <!-- https://bootsnipp.com/snippets/featured/animated-loading -->
+        <div class="container">
+            <div class="row">
+                <div id="loading">
+                    <ul class="bokeh">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+            </div>
+        </div>     
         
         <!-- START: SCRIPTS DO MAPA -->
         <script>
@@ -97,15 +111,21 @@
         <script>
             function UpdateSamples(){
 
+                $('#loading').show();
+
                 var drp = $('#daterange').data('daterangepicker');
 
                 GetServerSamples(drp.startDate, drp.endDate)
                     .then(function(samples){
                         CreateMarkers(samples);
                         CreateHeatMap(samples);
+
+                        $('#loading').hide();
                     })
                     .catch(function(errorMsg){
                         console.log(errorMsg);
+
+                        $('#loading').hide();
                     })
             }
 
