@@ -122,8 +122,6 @@ app.post('/getInterval', function(req, res){
                     amplitude: e.get('amplitude')
                 };
 
-                console.log(newObj);
-
                 objArray.push(newObj);
             });
 

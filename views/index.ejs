@@ -92,7 +92,24 @@
         <!-- END: SCRIPTS DO DATE/TIME PICKER -->
 
         <!-- START: UPDATE MAP SAMPLES -->
-        <script type="text/javascript" src="index_updateSamples.js"></script>
+        <script type="text/javascript" src="getServerSamples.js"></script>
+
+        <script>
+            function UpdateSamples(){
+
+                var drp = $('#daterange').data('daterangepicker');
+
+                GetServerSamples(drp.startDate, drp.endDate)
+                    .then(function(samples){
+                        CreateMarkers(samples);
+                        CreateHeatMap(samples);
+                    })
+                    .catch(function(errorMsg){
+                        console.log(errorMsg);
+                    })
+            }
+
+        </script>
         <!-- END: UPDATE MAP SAMPLES -->
 
         <!-- START: SCRIPTS GERAIS -->

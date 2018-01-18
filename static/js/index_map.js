@@ -1,16 +1,33 @@
 var map = null;
 var heatmap = null;
 var markers = [];
+var samples = [];
+
+function RemoveMarkers()
+{
+    markers = [];
+}
+
+function RemoveHeatMap()
+{
+    heatmap.setMap(null);
+}
 
 function CreateMarkers(mapData)
 {
+    if(markers.length != 0)
+        RemoveMarkers();
+
     mapData.forEach(element => {
-        AddMarker(element.lat, element.long, element.dB);
+        AddMarker(element.timestamp, element.latitude, element.longitude, element.amplitude);
     });
 }
 
 function CreateHeatMap(mapData)
 {
+    if(heatmap)
+        RemoveHeatMap();
+
     var heatMapData = [];
 
     mapData.forEach(element => {
@@ -25,10 +42,10 @@ function CreateHeatMap(mapData)
         });        
 }
 
-function AddMarker(latitude, longitude, dB) {
+function AddMarker(timestamp, latitude, longitude, dB) {
     var marker = new google.maps.Marker({
         position: {lat: latitude, lng: longitude},
-        title: String(dB) + ' dB'
+        title: timestamp.toLocaleString() + '/' + String(dB) + ' dB'
     });
 
     markers.push(marker);    
