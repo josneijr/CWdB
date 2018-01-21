@@ -54,6 +54,7 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
+    z-index: 100;
 }
 .bokeh {
     border: 0.01em solid rgba(150, 150, 150, 0.1);

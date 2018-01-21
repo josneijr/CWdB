@@ -4,14 +4,23 @@
         <title>CWdB - TABELAS</title>
 
         <% include partials/head %>
-        
+
+        <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+      
+        <!-- Include Moment -->
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>        
+        <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>    
+
+        <!-- Include Date Range Picker -->
+        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>  
+
         <link rel="stylesheet" href="admin-lte/css/slider.css">  
 
         <link rel="stylesheet" href="tabelas.css">
 
     </head>
 
-    <body class="hold-transition skin-blue layout-top-nav">
+    <body class="hold-transition skin-blue layout-top-nav" onload="UpdateTables()">
         
         <% include partials/header %>
         
@@ -20,31 +29,19 @@
                 <strong>Período de tempo:</strong>
             </div>
             <div class="col-lg-2" style="margin-bottom: 15px; padding-top: 15px; margin-left: -100px">
-                <input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" style="color: black; width: 300px" />
+                <input type="text" id="daterange" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" style="color: black; width: 300px" />
             </div>
 
 
-            <div class="col-lg-1 col-lg-offset-9 slider slider-horizontal" id="green">
-                <div class="slider-track">
-                    <div class="slider-track-low" style="left: 0px; width: 43.75%;"></div>
-                    <div class="slider-selection" style="left: 43.75%; width: 31.25%;"></div>
-                    <div class="slider-track-high" style="right: 0px; width: 25%;"></div>
-                    <div class="slider-handle min-slider-handle round" role="slider" aria-valuemin="-200" aria-valuemax="200" aria-valuenow="-25" style="left: 43.75%;" tabindex="0"></div>
-                    <div class="slider-handle max-slider-handle round" role="slider" aria-valuemin="-200" aria-valuemax="200" aria-valuenow="100" style="left: 75%;" tabindex="0"></div>
-                </div>
-                <div class="tooltip tooltip-main top" role="presentation" style="left: 59.375%; margin-left: -31.5px;">
-                    <div class="tooltip-arrow"></div>
-                    <div class="tooltip-inner">-25 : 100</div>
-                </div>
-                <div class="tooltip tooltip-min top" role="presentation" style="left: 43.75%; margin-left: 0px; display: none;">
-                    <div class="tooltip-arrow"></div>
-                    <div class="tooltip-inner">-25</div>
-                </div>
-                <div class="tooltip tooltip-max top" role="presentation" style="left: 75%; margin-left: 0px; display: none;">
-                    <div class="tooltip-arrow"></div>
-                    <div class="tooltip-inner">100</div>
-                </div>
-            </div>            
+            <div class="col-lg-1 col-lg-offset-2" style="margin-bottom: 15px; padding-top: 15px">
+                <strong>Intervalo dB:</strong>        
+            </div>
+            <div class="col-lg-3"  style="margin-bottom: 15px; padding-top: 15px">
+                <input id="slider_dB" type="text" data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="70"/>                
+            </div>        
+            <div class="col-lg-1"  style="margin-bottom: 15px; padding-top: 15px">
+                <label id="sliderValue">60 dB</label>
+            </div>        
         </div>
         
         <div class="row">
@@ -58,7 +55,7 @@
         
                     <div class="info-box-content">
                         <span class="info-box-text">Pontos Coletados</span>
-                        <span class="info-box-number text-center" style="margin-top: 12px">50.000</span>
+                        <span class="info-box-number text-center" id="totalSamples" style="margin-top: 12px">50.000</span>
                     </div>
         
                 </div>
@@ -72,7 +69,7 @@
                     </span>
         
                     <div class="info-box-content">
-                        <span class="info-box-text" style="margin-bottom: 10px">Pontos abaixo de 60dB</span>
+                        <span id="lowerThanDB" class="info-box-text" style="margin-bottom: 10px">Pontos abaixo de 60dB</span>
                         <span class="info-box-number">5.000</span>
         
                         <div class="progress">
@@ -92,7 +89,7 @@
         
                     <div class="info-box-content">
         
-                        <span class="info-box-text" style="margin-bottom: 10px">Pontos acima de 60dB</span>
+                        <span id="greaterThanDB" class="info-box-text" style="margin-bottom: 10px">Pontos acima de 60dB</span>
                         <span class="info-box-number">45.000</span>
         
                         <div class="progress">
@@ -111,37 +108,50 @@
             </div>
         
         </div>
+
+        <!-- https://bootsnipp.com/snippets/featured/animated-loading -->
+        <div class="container">
+                <div class="row">
+                    <div id="loading">
+                        <ul class="bokeh">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>          
         
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-            google.charts.load('current', { 'packages': ['corechart'] });
-            google.charts.setOnLoadCallback(drawChart);
+        <script src="admin-lte/js/bootstrap-slider.js"></script>        
         
-            function drawChart() {
-                var data = google.visualization.arrayToDataTable([
-                    ['Year', 'Sales', 'Expenses'],
-                    ['2004', 1000, 400],
-                    ['2005', 1170, 460],
-                    ['2006', 660, 1120],
-                    ['2007', 1030, 540],
-                    ['2008', 1030, 540],
-                    ['2009', 1020, 600],
-                    ['2010', 1010, 780]
-                ]);
-        
-                var options = {
-                    title: 'Company Performance',
-                    curveType: 'function',
-                    legend: { position: 'bottom' }
-                };
-        
-                var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-        
-                chart.draw(data, options);
-            }
-        </script>  
-        
-        <script src="admin-lte/js/bootstrap-slider.js"></script>
+        <script>
+            var startDate = new Date();
+
+            startDate.setHours(startDate.getHours() - 24);
+
+            $('#daterange').daterangepicker({
+                timePicker: true,
+                timePicker24Hour: true,
+                timePickerIncrement: 1,
+                startDate: startDate,
+                endDate: new Date(),
+                locale: {
+                    format: 'DD/MM/YYYY HH:mm'
+                }
+            });
+            
+            $('#slider_dB').slider({
+                formatter: function(value) {
+                }
+            });            
+        </script>        
+
+        <!-- START: UPDATE MAP SAMPLES -->
+        <script type="text/javascript" src="getServerSamples.js"></script>
+
+        <script type="text/javascript" src="tabelas_update.js"></script>
+
+        <script type="text/javascript" src="tabelas_callbacks.js"></script> 
 
     </body>
 

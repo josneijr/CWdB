@@ -137,31 +137,39 @@ app.post('/receiveData', function(req, res){
 
     //Os dados vem em formato JSON, portanto, podemos usar os componentes direto!
     console.log('New data arrived at ' + new Date().toLocaleString());
-    
-    //Checar se todas as propriedades estão no lugar
-    var attributes = ['timestamp', 'lat', 'long', 'value'];
 
-    if(!CheckNewDataAttribute(attributes, req.body)){
-        res.send('bad_data');
-        return;
-    }
-    else{
-        res.send('ok');
-        console.log('ts: ' + req.body.timestamp);
-        console.log('lat/long: ' + req.body.lat + '/' + req.body.long);
-        console.log('value: ' + req.body.value);
-    }
+    var samples = req.body;
 
-    //Save in DB
-    Sample.sync({force: false}).then(() => {
-        // Table created
-        Sample.create({
-            data: moment(req.body.timestamp, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'),
-            latitude: req.body.lat,
-            longitude: req.body.long,
-            amplitude: req.body.value
+    console.log(samples);    
+
+    console.log('NewData: ' + samples.length);
+
+    samples.forEach(function(sample){
+        //Checar se todas as propriedades estão no lugar
+        var attributes = ['timestamp', 'lat', 'long', 'value'];
+
+        if(!CheckNewDataAttribute(attributes, sample)){
+            return;
+        }
+        else{
+            console.log('ts: ' + sample.timestamp);
+            console.log('lat/long: ' + sample.lat + '/' + sample.long);
+            console.log('value: ' + sample.value);
+        }
+
+        //Save in DB
+        Sample.sync({force: false}).then(() => {
+            // Table created
+            Sample.create({
+                data: moment(sample.timestamp, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'),
+                latitude: sample.lat,
+                longitude: sample.long,
+                amplitude: sample.value
+            });
         });
     });
+
+    res.send('ok');
 });
 
 const CheckNewDataAttribute = (attributesNames, obj) => attributesNames.map(t => { 
