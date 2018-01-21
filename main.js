@@ -161,7 +161,7 @@ app.post('/receiveData', function(req, res){
         Sample.sync({force: false}).then(() => {
             // Table created
             Sample.create({
-                data: moment(sample.timestamp, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'),
+                data: moment(sample.timestamp, 'MM/DD/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'),
                 latitude: sample.lat,
                 longitude: sample.long,
                 amplitude: sample.value
