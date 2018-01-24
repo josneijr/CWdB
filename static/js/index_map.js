@@ -32,7 +32,6 @@ function CreateHeatMap(mapData)
 
     mapData.forEach(element => {
         heatMapData.push({location: new google.maps.LatLng(element.latitude, element.longitude), weight: element.amplitude});
-        console.log(heatMapData);
     });
 
     heatmap = new google.maps.visualization.HeatmapLayer({
@@ -42,11 +41,20 @@ function CreateHeatMap(mapData)
         });        
 }
 
+function MarkerCallback()
+{
+    $('#lineModalLabel').html('Histórico ' + this.title);
+
+    $('#markerInfo').modal();
+}
+
 function AddMarker(timestamp, latitude, longitude, dB) {
     var marker = new google.maps.Marker({
         position: {lat: latitude, lng: longitude},
         title: timestamp.toLocaleString() + '/' + String(dB) + ' dB'
     });
+
+    marker.addListener('click', MarkerCallback);    
 
     markers.push(marker);    
 }

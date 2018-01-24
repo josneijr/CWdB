@@ -23,3 +23,8 @@ $('#heatMap').click(function(obj){
         SetHeatMapVisibility(true);
     }    
 });
+
+function MarkerClick()
+{
+    
+}

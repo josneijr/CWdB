@@ -21,7 +21,6 @@ body {
 } 
 
 #over_map {
-    background-color: none;
     position: absolute;
     top: 100px;
     left: 10px;
@@ -43,6 +42,7 @@ body {
 #over_map div {
     padding: 3px 7px;
 }
+
 
 /*https://bootsnipp.com/snippets/featured/animated-loading*/
 

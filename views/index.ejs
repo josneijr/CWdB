@@ -5,14 +5,6 @@
 
         <% include partials/head %>
 
-        <!-- Include Required Prerequisites -->
-        <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
-        <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-
-        <!-- Include Date Range Picker -->
-        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
-
         <script type="text/javascript" src="index_map.js"></script>
         
         <link rel="stylesheet" href="index.css">
@@ -40,9 +32,18 @@
                     </div>
 
                     <div class="row">
-                        <button id="markers" type="button" class="btn btn-large btn-info">Markers</button>
-                        <button id="heatMap" type="button" class="btn btn-large btn-info active">Mapa de Calor</button>
+                        <button id="markers" type="button" class="col-xs-6 btn btn-large btn-info">Markers</button>
+                        <button id="heatMap" type="button" class="col-xs-6 btn btn-large btn-info active">Mapa de Calor</button>    
                     </div>  
+
+                    <div class="row">
+                        <div class="col-lg-9" style="margin-bottom: 15px; padding-top: 15px">
+                            <input id="slider_dB" type="text" data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="70"/>                
+                        </div>        
+                        <div class="col-lg-3" style="margin-bottom: 15px; padding-top: 15px">
+                            <label id="sliderValue">60 dB</label>
+                        </div>     
+                    </div>
 
                 </div>
             </div>
@@ -60,7 +61,58 @@
                     </ul>
                 </div>
             </div>
+        </div>    
+        
+        <!-- START: MODAL -->
+        <div class="modal fade" id="markerInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    
+                    <!-- START: HEADER -->
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="lineModalLabel">Histórico</h3>
+                    </div>
+                    <!-- END: HEADER -->
+
+                    <!-- START: BODY -->
+                    <div class="modal-body">
+                        <div id="visualization"></div>
+                    </div>
+                    <!-- END: BODY -->
+
+                    <!-- START: FOOTER -->
+                    <div class="modal-footer">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default btn-hover-green" data-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                    <!-- END: FOOTER -->
+
+                </div>
+            </div>
         </div>     
+        <!-- END: MODAL -->   
+
+        <script type="text/javascript">
+            // DOM element where the Timeline will be attached
+            var container = document.getElementById('visualization');
+          
+            // Create a DataSet (allows two way data-binding)
+            var items = new vis.DataSet([
+              {id: 1, content: 'item 1', start: '2013-04-20'},
+              {id: 2, content: 'item 2', start: '2013-04-14'},
+              {id: 3, content: 'item 3', start: '2013-04-18'},
+              {id: 4, content: 'item 4', start: '2013-04-16', end: '2013-04-19'},
+              {id: 5, content: 'item 5', start: '2013-04-25'},
+              {id: 6, content: 'item 6', start: '2013-04-27'}
+            ]);
+          
+            // Configuration for the Timeline
+            var options = {};
+          
+            // Create a Timeline
+            var timeline = new vis.Timeline(container, items, options);
+        </script>        
         
         <!-- START: SCRIPTS DO MAPA -->
         <script>
@@ -81,6 +133,19 @@
         
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2NrBR3ZlTLNT0jFm8-FooJAKxTjPTRgs&callback=myMap&libraries=visualization"></script>
         <!-- END: SCRIPTS DO MAPA -->
+
+        <!-- START: SLIDER -->
+        <script src="admin-lte/js/bootstrap-slider.js"></script> 
+
+        <script>
+            $('#slider_dB').slider({
+                formatter: function(value) {
+                    return 'Current value: ' + value;
+                }
+            });   
+        </script>
+
+        <!-- END: SLIDER -->        
 
         <!-- START: SCRIPTS DO DATE/TIME PICKER -->
         <script>
@@ -135,6 +200,7 @@
         <!-- START: SCRIPTS GERAIS -->
         <script type="text/javascript" src="index_callbacks.js"></script>
         <!-- END: SCRIPTS GERAIS -->
+
     </body>
 
 </html>
