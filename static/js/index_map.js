@@ -2,6 +2,7 @@ var map = null;
 var heatmap = null;
 var markers = [];
 var samples = [];
+var reffMarker = null;
 
 function RemoveMarkers()
 {
@@ -45,7 +46,8 @@ function CreateHeatMap(mapData)
 function AddMarker(timestamp, latitude, longitude, dB) {
     var marker = new google.maps.Marker({
         position: {lat: latitude, lng: longitude},
-        title: timestamp.toLocaleString() + '/' + String(dB) + ' dB'
+        title: timestamp.toLocaleString() + '/' + String(dB) + ' dB',
+        label: String(dB)
     });
 
     markers.push(marker);    
@@ -59,4 +61,8 @@ function SetMarkersVisibility(visible){
 
 function SetHeatMapVisibility(visible){
     heatmap.setMap(visible ? map : null);
+}
+
+function CreateRefferenceMarker(lat, long){
+    console.log(lat + '/' + long);
 }
