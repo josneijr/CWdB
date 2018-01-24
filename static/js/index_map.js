@@ -2,7 +2,7 @@ var map = null;
 var heatmap = null;
 var markers = [];
 var samples = [];
-var reffMarker = null;
+var reffMarker = new google.maps.Marker();
 
 function RemoveMarkers()
 {
@@ -63,6 +63,7 @@ function SetHeatMapVisibility(visible){
     heatmap.setMap(visible ? map : null);
 }
 
-function CreateRefferenceMarker(lat, long){
-    console.log(lat + '/' + long);
+function CreateRefferenceMarker(mapElement){
+    reffMarket.setPosition(mapElement)
+    reffMarker.setMap(map);
 }
