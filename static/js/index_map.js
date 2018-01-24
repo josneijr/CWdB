@@ -46,8 +46,8 @@ function CreateHeatMap(mapData)
 function AddMarker(timestamp, latitude, longitude, dB) {
     var marker = new google.maps.Marker({
         position: {lat: latitude, lng: longitude},
-        title: timestamp.toLocaleString() + '/' + String(dB) + ' dB',
-        label: dB.toPrecision(3)
+        title: timestamp.toLocaleString() + ' / ' + String(dB.toFixed(2)) + ' dB',
+        label: dB.toPrecision(2)
     });
 
     markers.push(marker);    
