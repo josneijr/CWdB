@@ -47,7 +47,7 @@ function AddMarker(timestamp, latitude, longitude, dB) {
     var marker = new google.maps.Marker({
         position: {lat: latitude, lng: longitude},
         title: timestamp.toLocaleString() + '/' + String(dB) + ' dB',
-        label: $.number( dB, 0 )
+        label: dB.toPrecision(3)
     });
 
     markers.push(marker);    
