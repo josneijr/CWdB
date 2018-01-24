@@ -64,6 +64,6 @@ function SetHeatMapVisibility(visible){
 }
 
 function CreateRefferenceMarker(mapElement){
-    reffMarket.setPosition(mapElement)
+    reffMarker.setPosition(mapElement)
     reffMarker.setMap(map);
 }
