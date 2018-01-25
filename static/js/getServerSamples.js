@@ -28,3 +28,32 @@ var GetServerSamples = function(startDate, endDate) {
         });
     });
 }
+
+var GetServerTimeline = function(latitude, longitude, radius) {
+            
+    return new Promise(function(resolve, reject) {
+        
+        var sampleData = {
+            latitude: latitude,
+            longitude: longitude,
+            radius: radius
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/getTimeline",
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(sampleData),
+            async: true,
+            timeout: 10000,
+            
+            success: function (samples) {
+                resolve(samples);
+            },
+            error: function(error) {
+                reject(Error("Erro ao solicitar amostras!"));
+            }
+        });
+    });
+}

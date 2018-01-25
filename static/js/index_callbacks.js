@@ -24,7 +24,6 @@ $('#heatMap').click(function(obj){
     }    
 });
 
-function MarkerClick()
-{
-    
-}
+$('#daterange').on('apply.daterangepicker', function(ev, picker) {
+    UpdateSamples();
+});  

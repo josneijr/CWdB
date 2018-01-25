@@ -83,7 +83,7 @@ var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('App listening on port ' + listener.address().port);
 });
 
-//Pegar dados em um intervalo
+//Pegar dados em um intervalo de data/hora
 app.post('/getInterval', function(req, res){
 
     var attributes = ['initialDate', 'finalDate'];
@@ -128,11 +128,69 @@ app.post('/getInterval', function(req, res){
             res.send(JSON.stringify(objArray));
         })
         .catch({
-
         })
 });
 
-//Middleware
+//Pegar dados em um intervalo de data/hora
+app.post('/getTimeline', function(req, res){
+
+    console.log('oi');
+
+    var attributes = ['latitude', 'longitude', 'radius'];
+
+    if(!CheckNewDataAttribute(attributes, req.body)){
+        res.error('{"message": "bad_data"}');
+        return;
+    }
+    else{
+        console.log('New timeline request! On LATITUDE ' +
+                    req.body.latitude +
+                    ' and LONGITUDE '+
+                    req.body.longitude +
+                    ' with radius ' +
+                    req.body.radius);                    
+    }
+
+    var reffLat = req.body.latitude;
+    var reffLng = req.body.longitude;
+    var reffRadius = req.body.radius;
+
+    Sample.findAll({ 
+        where: {
+            latitude:{
+                [Op.gte]: reffLat-reffRadius*0.00001,
+                [Op.lte]: reffLat+reffRadius*0.00001,
+            },
+            longitude:{
+                [Op.gte]: reffLng-reffRadius*0.00001,
+                [Op.lte]: reffLng+reffRadius*0.00001,
+            }
+        } 
+        })
+        .then(response => {
+
+            var objArray = [];
+
+            response = response.slice(0, 100);    
+
+            response.forEach(function(e){
+                var newObj = {
+                    timestamp: e.get('data'),
+                    latitude: e.get('latitude'),
+                    longitude: e.get('longitude'),
+                    amplitude: e.get('amplitude')
+                };
+
+                objArray.push(newObj);
+            });
+
+            res.send(JSON.stringify(objArray));
+        })
+        .catch({
+        })
+});
+
+//Middleware para receber os dados do hardware
 app.post('/receiveData', function(req, res){
 
     //Os dados vem em formato JSON, portanto, podemos usar os componentes direto!

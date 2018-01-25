@@ -3,6 +3,22 @@ var heatmap = null;
 var markers = [];
 var samples = [];
 var reffMarker = null;
+var iconRed = null;
+
+function InitializeMapResources()
+{
+    var iconSize = 40; //px
+
+    iconRed = {
+        url: "marker_red.svg", // url
+        scaledSize: new google.maps.Size(iconSize, iconSize) // scaled size
+    };
+
+    iconBlue = {
+        url: "marker_blue.svg", // url
+        scaledSize: new google.maps.Size(iconSize, iconSize) // scaled size
+    };    
+}
 
 function RemoveMarkers()
 {
@@ -52,8 +68,8 @@ function MarkerCallback()
 function AddMarker(timestamp, latitude, longitude, dB) {
     var marker = new google.maps.Marker({
         position: {lat: latitude, lng: longitude},
-        title: timestamp.toLocaleString() + ' / ' + String(dB.toFixed(2)) + ' dB',
-        label: dB.toPrecision(2)
+        title: moment(timestamp).format('HH:mm:ss DD/MM/YYYY') + ' / ' + String(dB.toFixed(2)) + ' dB',
+        icon: iconRed
     });
 
     marker.addListener('click', MarkerCallback);    
@@ -73,8 +89,57 @@ function SetHeatMapVisibility(visible){
 
 function CreateRefferenceMarker(mapElement){
     if(reffMarker == null)
-       reffMarker = new google.maps.Marker();
+    {
+        reffMarker = new google.maps.Marker({
+            icon: iconBlue
+        });
+
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });        
+
+        reffMarker.addListener('click', function() {
+            infowindow.open(map, reffMarker);
+        });   
+        
+        infowindow.open(map, reffMarker);
+    }
     
-    reffMarker.setPosition(mapElement)
+    reffMarker.setAnimation(google.maps.Animation.DROP);    
+    reffMarker.setPosition(mapElement.latLng);
     reffMarker.setMap(map);
+
+    TESTE(mapElement.latLng.lat(), mapElement.latLng.lng());
 }
+
+var contentString = '<div id="content">'+
+                        '<h3 id="firstHeading" class="firstHeading">Histórico da Região</h1>'+
+                        '<div id="bodyContent class="center-block">'+
+                            '<button type="button" class="btn btn-info btn-md center-block" data-toggle="modal" data-target="#markerInfo">Abrir</button>' +
+                        '</div>'+
+                    '</div>';
+
+function TESTE(latitude, longitude){
+
+    console.log(latitude);
+    console.log(longitude);
+
+    $('#loading').show();
+
+    var drp = $('#daterange').data('daterangepicker');
+
+    GetServerTimeline(latitude, longitude, 100)
+        .then(function(samples){
+            console.log(samples.length);
+
+            CreateMarkers(samples);
+            CreateHeatMap(samples);
+
+            $('#loading').hide();
+        })
+        .catch(function(errorMsg){
+            console.log(errorMsg);
+
+            $('#loading').hide();
+        })
+}                    

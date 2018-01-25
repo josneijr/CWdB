@@ -41,7 +41,7 @@
                             <input id="slider_dB" type="text" data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="70"/>                
                         </div>        
                         <div class="col-lg-3" style="margin-bottom: 15px; padding-top: 15px">
-                            <label id="sliderValue">60 dB</label>
+                            <label id="sliderValue"> > 60 dB</label>
                         </div>     
                     </div>
 
@@ -126,6 +126,8 @@
                         mapTypeIds: [google.maps.MapTypeId.ROADMAP]
                     },                      
                 }
+
+                InitializeMapResources();
         
                 map = new google.maps.Map(document.getElementById("map"), mapOptions);
                 
@@ -164,11 +166,7 @@
                 locale: {
                     format: 'DD/MM/YYYY HH:mm'
                 }
-            });
-
-            $('#daterange').on('apply.daterangepicker', function(ev, picker) {
-                UpdateSamples();
-            });            
+            });          
         </script>        
         <!-- END: SCRIPTS DO DATE/TIME PICKER -->
 
