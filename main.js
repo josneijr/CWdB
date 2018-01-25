@@ -111,23 +111,9 @@ app.post('/getInterval', function(req, res){
         } 
         })
         .then(response => {
-
-            var objArray = [];
-
-            response.forEach(function(e){
-                var newObj = {
-                    timestamp: e.get('data'),
-                    latitude: e.get('latitude'),
-                    longitude: e.get('longitude'),
-                    amplitude: e.get('amplitude')
-                };
-
-                objArray.push(newObj);
-            });
-
-            res.send(JSON.stringify(objArray));
+            res.json(response.map(t => t.get()));
         })
-        .catch({
+        .catch(() => {
 
         })
 });
