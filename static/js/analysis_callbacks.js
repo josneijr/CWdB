@@ -1,5 +1,5 @@
 $('#slider_dB').on('slideStop', function(sliderValue){
-    UpdateTables();
+    RefreshPage();
 })
 
 $('#slider_dB').on('slide', function(sliderValue){
@@ -7,5 +7,5 @@ $('#slider_dB').on('slide', function(sliderValue){
 })
 
 $('#daterange').on('apply.daterangepicker', function(ev, picker) {          
-    UpdateTables();
-});   
+    RefreshPage();
+});  

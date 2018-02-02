@@ -70,12 +70,12 @@ app.get('/', function (req, res) {
     res.render('index');
 });
 
-app.get('/tabelas', (req, res) => {
-    res.render('tabelas');
+app.get('/analysis', (req, res) => {
+    res.render('analysis');
 });
 
-app.get('/sobre', (req, res) => {
-    res.render('sobre');
+app.get('/about', (req, res) => {
+    res.render('about');
 });
 
 // start server, using either the heroku given port or the 3000, for local debugging

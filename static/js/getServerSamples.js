@@ -2,7 +2,7 @@
 //endDate: data/hora finais
 //return: array contendo os samples encontrados (vazio caso não encontre nada)
 var GetServerSamples = function(startDate, endDate) {
-            
+    
     return new Promise(function(resolve, reject) {
         
         var timePickerData = {

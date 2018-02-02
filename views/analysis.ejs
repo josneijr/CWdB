@@ -5,20 +5,28 @@
 
         <% include partials/head %>
 
-
-      
         <!-- Include Moment -->
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>        
         <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>    
 
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>            
+
         <!-- Include Date Range Picker -->
         <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>  
 
-        <link rel="stylesheet" href="tabelas.css">
+        <link rel="stylesheet" href="analysis.css">    
 
+        <!-- SCRIPT: UPDATE SAMPLES -->
+        <script type="text/javascript" src="getServerSamples.js"></script>             
+
+        <!-- SCRIPTS DO GRÁFICO -->
+        <script type="text/javascript" src="analysis_graph.js"></script>          
+
+        <!-- SCRIPT DE REFRESH DA TELA -->
+        <script type="text/javascript" src="analysis_updateScreen.js"></script>          
     </head>
 
-    <body class="hold-transition skin-blue layout-top-nav" onload="UpdateTables()">
+    <body class="hold-transition skin-blue layout-top-nav" onload="OnPageLoad()">
         
         <% include partials/header %>
         
@@ -99,30 +107,51 @@
                 </div>
             </div>
         </div>
-        
+
+        <!-- START: MAPA/GRÁFICO -->
         <div class="row">
-            <div class="col-xs-12 col-lg-6">
-                <div id="curve_chart" style="width: 900px; height: 500px"></div>
+
+            <div class="col-lg-6">
+                <!-- START: MAPA -->
+                <div id="map" class="col-xs-12"></div>
+                <!-- END: MAPA -->
+            </div>
+
+            <div class="col-lg-6">
+                <!-- START: GRÁFICO -->
+                <canvas id="myChart"></canvas>                
+                <!-- END: GRÁFICO -->
             </div>
         
         </div>
+        <!-- END: MAPA/GRÁFICO -->
 
         <!-- https://bootsnipp.com/snippets/featured/animated-loading -->
         <div class="container">
-                <div class="row">
-                    <div id="loading">
-                        <ul class="bokeh">
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                        </ul>
-                    </div>
+            <div class="row">
+                <div id="loading">
+                    <ul class="bokeh">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
                 </div>
-            </div>          
+            </div>
+        </div>         
         
-        <script src="admin-lte/js/bootstrap-slider.js"></script>        
+        <script src="admin-lte/js/bootstrap-slider.js"></script>   
         
+              
+        <!-- SCRIPT: ESPECÍFICOS DA PÁGINA -->
         <script>
+            function OnPageLoad() {
+                //Inicia o gráfico, ainda vazio
+                var graph2d = InitializeGraph();
+
+                //Update page
+                RefreshPage();                
+            };               
+            
             var startDate = new Date();
 
             startDate.setHours(startDate.getHours() - 24);
@@ -141,15 +170,32 @@
             $('#slider_dB').slider({
                 formatter: function(value) {
                 }
-            });            
-        </script>        
+            });   
+                    
+        </script>         
+        
+        <!-- START: SCRIPTS DO MAPA -->
+        <script>
 
-        <!-- START: UPDATE MAP SAMPLES -->
-        <script type="text/javascript" src="getServerSamples.js"></script>
-
-        <script type="text/javascript" src="tabelas_update.js"></script>
-
-        <script type="text/javascript" src="tabelas_callbacks.js"></script> 
+            function myMap()
+            {
+                var mapOptions = {
+                    center: new google.maps.LatLng(-25.45, -49.26),
+                    zoom: 12,
+                    mapTypeControlOptions: {
+                        mapTypeIds: [google.maps.MapTypeId.ROADMAP]
+                    },                      
+                }                
+      
+                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+            }        
+        </script>
+            
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2NrBR3ZlTLNT0jFm8-FooJAKxTjPTRgs&callback=myMap&libraries=visualization"></script>
+        <!-- END: SCRIPTS DO MAPA -->   
+        
+        <!-- SCRIPTS DE CALLBACKS -->
+        <script type="text/javascript" src="analysis_callbacks.js"></script>                  
 
     </body>
 

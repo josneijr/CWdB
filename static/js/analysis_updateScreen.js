@@ -1,6 +1,4 @@
-var samples = [];
-
-function UpdateTables(){
+function RefreshPage(){
     //Mostrar a tela de carregamento
     $('#loading').show();
 
@@ -21,6 +19,10 @@ function UpdateTables(){
         .then(function(samples){
             //Imprime a quantidade de samples encontrada no intervalo solicitado
             $('#totalSamples').html(samples.length.toString());
+
+            console.log(samples);
+
+            UpdateGraph(samples);
 
             //Apaga a tela de carregamento
             $('#loading').hide();
