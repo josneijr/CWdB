@@ -97,6 +97,7 @@ app.post('/getInterval', function(req, res){
                     req.body.initialDate.toLocaleString() + 
                     ' until ' + 
                     req.body.finalDate.toLocaleString());                    
+        console.log();
     }
 
     var initialDate = moment(req.body.initialDate, 'DD/MM/YYYY HH:mm:ss').toDate();
@@ -118,38 +119,44 @@ app.post('/getInterval', function(req, res){
 });
 
 //Pegar dados em um intervalo de data/hora
-app.post('/getTimeline', function(req, res){
+app.post('/getRegion', function(req, res){
 
-    console.log('oi');
-
-    var attributes = ['latitude', 'longitude', 'radius'];
+    var attributes = ['startDate', 'finalDate', 'latMin', 'latMax', 'lngMin', 'latMax'];
 
     if(!CheckNewDataAttribute(attributes, req.body)){
         res.error('{"message": "bad_data"}');
         return;
     }
     else{
-        console.log('New timeline request! On LATITUDE ' +
-                    req.body.latitude +
-                    ' and LONGITUDE '+
-                    req.body.longitude +
-                    ' with radius ' +
-                    req.body.radius);                    
+        console.log('New region request! On LATITUDES ' +
+                    req.body.latMin + '/' + req.body.latMax + 
+                    ' and LONGITUDES '+
+                    req.body.lngMin + '/' + req.body.lngMax + 
+                    ' between dates ' +
+                    req.body.initialDate + ' / ' + req.body.finalDate);                    
+        console.log();
     }
 
-    var reffLat = req.body.latitude;
-    var reffLng = req.body.longitude;
-    var reffRadius = req.body.radius;
+    var startTime = req.body.initialDate;
+    var finalTime = req.body.finalDate;
+    var latMin = req.body.latitude;
+    var latMax = req.body.longitude;
+    var lngMin = req.body.latitude;
+    var lngMax = req.body.longitude;    
 
     Sample.findAll({ 
         where: {
+            data:{
+                [Op.gte]: initialDate,
+                [Op.lte]: endDate
+            },
             latitude:{
-                [Op.gte]: reffLat-reffRadius*0.00001,
-                [Op.lte]: reffLat+reffRadius*0.00001,
+                [Op.gte]: latMin,
+                [Op.lte]: latMax,
             },
             longitude:{
-                [Op.gte]: reffLng-reffRadius*0.00001,
-                [Op.lte]: reffLng+reffRadius*0.00001,
+                [Op.gte]: lngMin,
+                [Op.lte]: lngMax,
             }
         } 
         })

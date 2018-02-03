@@ -29,19 +29,22 @@ var GetServerSamples = function(startDate, endDate) {
     });
 }
 
-var GetServerTimeline = function(latitude, longitude, radius) {
+var GetServerRegion = function(startTime, finalTime, latMin, latMax, lngMin, lngMax) {
             
     return new Promise(function(resolve, reject) {
         
         var sampleData = {
-            latitude: latitude,
-            longitude: longitude,
-            radius: radius
+            startTime: startTime,
+            finalTime: finalTime,
+            latMin: latMin,
+            latMax: latMax,
+            lngMin: lngMin,
+            lngMax: lngMax
         };
 
         $.ajax({
             type: "POST",
-            url: "/getTimeline",
+            url: "/getRegion",
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(sampleData),

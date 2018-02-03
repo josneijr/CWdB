@@ -1,11 +1,18 @@
-$('#slider_dB').on('slideStop', function(sliderValue){
-    RefreshPage();
+$('#minDbSlider').on('slideStop', function(sliderValue){
+    //RefreshPage();
 })
 
-$('#slider_dB').on('slide', function(sliderValue){
-    $('#sliderValue').html(sliderValue.value + "dB"); 
+$('#minDbSlider').on('slide', function(sliderValue){
+    $('#minDbLabel').html(sliderValue.value + " dB"); 
+})
+
+$('#radiusSlider').on('slide', function(sliderValue){
+    
+    reffCircle.setRadius(sliderValue.value);
+
+    $('#radiusLabel').html(sliderValue.value + " m"); 
 })
 
 $('#daterange').on('apply.daterangepicker', function(ev, picker) {          
-    RefreshPage();
+    //RefreshPage();
 });  

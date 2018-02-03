@@ -54,6 +54,12 @@
         </div>
         <!-- END: CAMPO SOBRE O MAPA -->
 
+        <!-- START: HELP BUTTON 
+        <button type="button" class="btn btn-danger btn-circle btn-xl" id="fixedbutton">
+            <i class="fa fa-question"></i>
+        </button>
+        <!-- START: HELP BUTTON -->        
+
         <!-- START: LOADING FRAME -->
         <!-- https://bootsnipp.com/snippets/featured/animated-loading -->
         <div class="container">
@@ -136,8 +142,6 @@
                 InitializeMapResources();
         
                 map = new google.maps.Map(document.getElementById("map"), mapOptions);
-                
-                google.maps.event.addListener(map, 'click', CreateRefferenceMarker);
             }        
         </script>
         

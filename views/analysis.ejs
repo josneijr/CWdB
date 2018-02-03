@@ -19,6 +19,9 @@
         <!-- SCRIPT: UPDATE SAMPLES -->
         <script type="text/javascript" src="getServerSamples.js"></script>             
 
+        <!-- SCRIPTS DO MAPA -->
+        <script type="text/javascript" src="analysis_map.js"></script>         
+
         <!-- SCRIPTS DO GRÁFICO -->
         <script type="text/javascript" src="analysis_graph.js"></script>          
 
@@ -30,84 +33,46 @@
         
         <% include partials/header %>
         
-        <div class="row bg-navy">
-            <div class="col-lg-2 col-lg-offset-1" style="margin-bottom: 15px; padding-top: 15px">
-                <strong>Período de tempo:</strong>
-            </div>
-            <div class="col-lg-2" style="margin-bottom: 15px; padding-top: 15px; margin-left: -100px">
-                <input type="text" id="daterange" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" style="color: black; width: 300px" />
+        <div class="row bg-navy text-filters">
+            <div class="col-lg-3 col-lg-offset-1" style="padding-top: 15px">
+                <div class=row>
+                    <strong>Período de tempo:</strong>
+                </div>
+                <div class=row>
+                    <input type="text" id="daterange" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" style="color: black; width: 300px" />
+                </div>                
             </div>
 
 
-            <div class="col-lg-1 col-lg-offset-2" style="margin-bottom: 15px; padding-top: 15px">
-                <strong>Intervalo dB:</strong>        
+            <div class="col-lg-2"style="margin-bottom: 15px; padding-top: 15px">
+                <div class="row">
+                    <strong>Mín. dB:</strong>    
+                    <strong id="minDbLabel" class=" pull-right text-right">-- dB</strong>      
+                </div>
+                <div class="row" style="margin-top: 5px">
+                    <input id="minDbSlider" type="text" data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="70"/>                
+                </div>  
             </div>
-            <div class="col-lg-3"  style="margin-bottom: 15px; padding-top: 15px">
-                <input id="slider_dB" type="text" data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="70"/>                
-            </div>        
-            <div class="col-lg-1"  style="margin-bottom: 15px; padding-top: 15px">
-                <label id="sliderValue">60 dB</label>
-            </div>        
+
+            <div class="col-lg-3"style="margin-left: 60px; margin-bottom: 15px; padding-top: 15px">
+                <div class="row">
+                    <strong>Raio de busca:</strong>    
+                    <strong id="radiusLabel" class=" pull-right text-right">-- m</strong>      
+                </div>
+                <div class="row" style="margin-top: 5px">
+                    <input id="radiusSlider" type="text" data-slider-min="0" data-slider-max="10000" data-slider-step="10" data-slider-value="300"/>                
+                </div>  
+            </div> 
+            
+            <div class="col-lg-2 center-block"style="padding-top: 15px">
+                <button class="btn btn-danger btn-lg center-block">
+                    <i class="fa fa-check"></i> 
+                    <strong>Aplicar</strong>
+                </button>
+            </div> 
+      
         </div>
         
-        <div class="row">
-        
-            <div class="info-box-div col-md-4 col-sm-6 col-xs-12">
-                <div class="info-box bg-gray">
-        
-                    <span class="info-box-icon">
-                        <i class="ion ion-ios-information-outline"></i>
-                    </span>
-        
-                    <div class="info-box-content">
-                        <span class="info-box-text">Pontos Coletados</span>
-                        <span class="info-box-number text-center" id="totalSamples" style="margin-top: 12px">50.000</span>
-                    </div>
-        
-                </div>
-            </div>
-        
-            <div class="info-box-div col-md-4 col-sm-6 col-xs-12">
-                <div class="info-box bg-green">
-        
-                    <span class="info-box-icon">
-                        <i class="ion ion-android-checkmark-circle"></i>
-                    </span>
-        
-                    <div class="info-box-content">
-                        <span id="lowerThanDB" class="info-box-text" style="margin-bottom: 10px">Pontos abaixo de 60dB</span>
-                        <span class="info-box-number">5.000</span>
-        
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 10%"></div>
-                        </div>
-        
-                    </div>
-        
-                </div>
-            </div>
-        
-            <div class="info-box-div col-md-4 col-sm-6 col-xs-12">
-                <div class="info-box bg-red">
-                    <span class="info-box-icon">
-                        <i class="ion ion-android-cancel"></i>
-                    </span>
-        
-                    <div class="info-box-content">
-        
-                        <span id="greaterThanDB" class="info-box-text" style="margin-bottom: 10px">Pontos acima de 60dB</span>
-                        <span class="info-box-number">45.000</span>
-        
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 90%"></div>
-                        </div>
-        
-                    </div>
-        
-                </div>
-            </div>
-        </div>
-
         <!-- START: MAPA/GRÁFICO -->
         <div class="row">
 
@@ -125,6 +90,72 @@
         
         </div>
         <!-- END: MAPA/GRÁFICO -->
+
+        <!-- START: DADOS COLETADOS -->
+        <div class="row">
+        
+            <div class="info-box-div col-md-4 col-sm-6 col-xs-12">
+                <div class="info-box bg-gray">
+        
+                    <span class="info-box-icon">
+                        <i class="ion ion-ios-information-outline"></i>
+                    </span>
+        
+                    <div class="info-box-content">
+                        <span class="info-box-text">Pontos Coletados</span>
+                        <span class="info-box-number text-center" id="totalSamples" style="margin-top: 12px">--</span>
+                    </div>
+        
+                </div>
+            </div>
+        
+            <div class="info-box-div col-md-4 col-sm-6 col-xs-12">
+                <div class="info-box bg-green">
+        
+                    <span class="info-box-icon">
+                        <i class="ion ion-android-checkmark-circle"></i>
+                    </span>
+        
+                    <div class="info-box-content">
+                        <span id="lowerThanDB" class="info-box-text" style="margin-bottom: 10px">Pontos abaixo de 60dB</span>
+                        <span id="lowerThanVal" class="info-box-number">--</span>
+        
+                        <div class="progress">
+                            <div id="progressbarLower" class="progress-bar" style="width: 0%"></div>
+                        </div>
+        
+                    </div>
+        
+                </div>
+            </div>
+        
+            <div class="info-box-div col-md-4 col-sm-6 col-xs-12">
+                <div class="info-box bg-red">
+                    <span class="info-box-icon">
+                        <i class="ion ion-android-cancel"></i>
+                    </span>
+        
+                    <div class="info-box-content">
+        
+                        <span id="greaterThanDB" class="info-box-text" style="margin-bottom: 10px">Pontos acima de 60dB</span>
+                        <span id="greaterThanVal" class="info-box-number">--</span>
+        
+                        <div class="progress">
+                            <div id="progressbarGreater" class="progress-bar" style="width: 0%"></div>
+                        </div>
+        
+                    </div>
+        
+                </div>
+            </div>
+        </div>
+        <!-- END: DADOS COLETADOS -->
+
+        <!-- START: HELP BUTTON
+        <button type="button" class="btn btn-danger btn-circle btn-xl" id="fixedbutton">
+            <i class="fa fa-question"></i>
+        </button>
+        <!-- START: HELP BUTTON -->
 
         <!-- https://bootsnipp.com/snippets/featured/animated-loading -->
         <div class="container">
@@ -167,32 +198,20 @@
                 }
             });
             
-            $('#slider_dB').slider({
+            $('#minDbSlider').slider({
                 formatter: function(value) {
                 }
             });   
+
+            $('#radiusSlider').slider({
+                formatter: function(value) {
+                }
+            });               
                     
         </script>         
         
-        <!-- START: SCRIPTS DO MAPA -->
-        <script>
-
-            function myMap()
-            {
-                var mapOptions = {
-                    center: new google.maps.LatLng(-25.45, -49.26),
-                    zoom: 12,
-                    mapTypeControlOptions: {
-                        mapTypeIds: [google.maps.MapTypeId.ROADMAP]
-                    },                      
-                }                
-      
-                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-            }        
-        </script>
-            
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2NrBR3ZlTLNT0jFm8-FooJAKxTjPTRgs&callback=myMap&libraries=visualization"></script>
-        <!-- END: SCRIPTS DO MAPA -->   
+        <!-- SCRIPTS DO MAPA -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2NrBR3ZlTLNT0jFm8-FooJAKxTjPTRgs&callback=InitializeMapResources&libraries=visualization"></script>
         
         <!-- SCRIPTS DE CALLBACKS -->
         <script type="text/javascript" src="analysis_callbacks.js"></script>                  

@@ -43,6 +43,25 @@ body {
     padding: 3px 7px;
 }
 
+#fixedbutton {
+    position: fixed;
+    bottom: 10px;
+    right: 10px; 
+    text-align:center;
+}
+
+#fixedbutton i{
+    margin: auto;
+}
+
+.btn-circle.btn-xl {
+    width: 60px;
+    height: 60px;
+    padding: 10px 16px;
+    font-size: 22px;
+    line-height: 1.33;
+    border-radius: 35px;
+ }
 
 /*https://bootsnipp.com/snippets/featured/animated-loading*/
 
