@@ -27,3 +27,11 @@ $('#heatMap').click(function(obj){
 $('#daterange').on('apply.daterangepicker', function(ev, picker) {
     UpdateSamples();
 });  
+
+$('#slider_dB').on('slide', function(sliderValue){
+    $('#sliderValue').html("min " + sliderValue.value + " dB"); 
+});
+
+$('#slider_dB').on('slideStop', function(sliderValue){
+    UpdateSamples();
+});

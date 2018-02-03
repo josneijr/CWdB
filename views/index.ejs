@@ -40,11 +40,11 @@
                     </div>  
 
                     <div class="row">
-                        <div class="col-lg-9" style="margin-bottom: 15px; padding-top: 15px">
-                            <input id="slider_dB" type="text" data-slider-min="0" data-slider-max="200" data-slider-step="1" data-slider-value="70"/>                
+                        <div class="col-lg-8" style="margin-bottom: 15px; padding-top: 15px">
+                            <input id="slider_dB" type="text" data-slider-min="30" data-slider-max="120" data-slider-step="1" data-slider-value="60"/>                
                         </div>        
-                        <div class="col-lg-3" style="margin-bottom: 15px; padding-top: 15px">
-                            <label id="sliderValue"> > 60 dB</label>
+                        <div class="col-lg-4" style="margin-bottom: 15px; padding-top: 15px">
+                            <label id="sliderValue"> min 60 dB</label>
                         </div>     
                     </div>
 
@@ -52,13 +52,7 @@
             </div>
         
         </div>
-        <!-- END: CAMPO SOBRE O MAPA -->
-
-        <!-- START: HELP BUTTON 
-        <button type="button" class="btn btn-danger btn-circle btn-xl" id="fixedbutton">
-            <i class="fa fa-question"></i>
-        </button>
-        <!-- START: HELP BUTTON -->        
+        <!-- END: CAMPO SOBRE O MAPA -->  
 
         <!-- START: LOADING FRAME -->
         <!-- https://bootsnipp.com/snippets/featured/animated-loading -->
@@ -188,12 +182,19 @@
 
                 $('#loading').show();
 
+                ClearMapData();
+
                 var drp = $('#daterange').data('daterangepicker');
 
-                GetServerSamples(drp.startDate, drp.endDate)
+                var limiardB = $('#slider_dB').slider('getValue');
+
+                GetServerSamples(drp.startDate, drp.endDate, limiardB)
                     .then(function(samples){
                         CreateMarkers(samples);
                         CreateHeatMap(samples);
+
+                        SetMarkersVisibility( $("#markers").hasClass("active") );
+                        SetHeatMapVisibility( $("#heatMap").hasClass("active") );                        
 
                         $('#loading').hide();
                     })

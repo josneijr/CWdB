@@ -88,9 +88,6 @@ function TESTE(latitude, longitude){
         .then(function(samples){
             console.log(samples.length);
 
-            CreateMarkers(samples);
-            CreateHeatMap(samples);
-
             $('#loading').hide();
         })
         .catch(function(errorMsg){

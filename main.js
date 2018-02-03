@@ -86,7 +86,7 @@ var listener = app.listen(process.env.PORT || 3000, function () {
 //Pegar dados em um intervalo de data/hora
 app.post('/getInterval', function(req, res){
 
-    var attributes = ['initialDate', 'finalDate'];
+    var attributes = ['initialDate', 'finalDate', 'limiardB'];
 
     if(!CheckNewDataAttribute(attributes, req.body)){
         res.error('{"message": "bad_data"}');
@@ -102,12 +102,16 @@ app.post('/getInterval', function(req, res){
 
     var initialDate = moment(req.body.initialDate, 'DD/MM/YYYY HH:mm:ss').toDate();
     var endDate = moment(req.body.finalDate, 'DD/MM/YYYY HH:mm:ss').toDate();
+    var limiardB = req.body.limiardB;
 
     Sample.findAll({ 
         where: {
             data:{
                 [Op.gte]: initialDate,
                 [Op.lte]: endDate
+            },
+            amplitude:{
+                [Op.gte]: limiardB
             }
         } 
         })
@@ -121,7 +125,7 @@ app.post('/getInterval', function(req, res){
 //Pegar dados em um intervalo de data/hora
 app.post('/getRegion', function(req, res){
 
-    var attributes = ['startDate', 'finalDate', 'latMin', 'latMax', 'lngMin', 'latMax'];
+    var attributes = ['startTime', 'finalTime', 'latMin', 'latMax', 'lngMin', 'latMax'];
 
     if(!CheckNewDataAttribute(attributes, req.body)){
         res.error('{"message": "bad_data"}');
@@ -133,12 +137,12 @@ app.post('/getRegion', function(req, res){
                     ' and LONGITUDES '+
                     req.body.lngMin + '/' + req.body.lngMax + 
                     ' between dates ' +
-                    req.body.initialDate + ' / ' + req.body.finalDate);                    
+                    req.body.startTime + ' / ' + req.body.finalTime);                    
         console.log();
     }
 
-    var startTime = req.body.initialDate;
-    var finalTime = req.body.finalDate;
+    var startTime = req.body.startTime;
+    var finalTime = req.body.finalTime;
     var latMin = req.body.latitude;
     var latMax = req.body.longitude;
     var lngMin = req.body.latitude;
@@ -147,8 +151,8 @@ app.post('/getRegion', function(req, res){
     Sample.findAll({ 
         where: {
             data:{
-                [Op.gte]: initialDate,
-                [Op.lte]: endDate
+                [Op.gte]: startTime,
+                [Op.lte]: finalTime
             },
             latitude:{
                 [Op.gte]: latMin,
@@ -161,23 +165,7 @@ app.post('/getRegion', function(req, res){
         } 
         })
         .then(response => {
-
-            var objArray = [];
-
-            response = response.slice(0, 100);    
-
-            response.forEach(function(e){
-                var newObj = {
-                    timestamp: e.get('data'),
-                    latitude: e.get('latitude'),
-                    longitude: e.get('longitude'),
-                    amplitude: e.get('amplitude')
-                };
-
-                objArray.push(newObj);
-            });
-
-            res.send(JSON.stringify(objArray));
+            res.json(response.map(t => t.get()));
         })
         .catch({
         })

@@ -1,13 +1,14 @@
 //startDate: data/hora iniciais
 //endDate: data/hora finais
 //return: array contendo os samples encontrados (vazio caso não encontre nada)
-var GetServerSamples = function(startDate, endDate) {
+var GetServerSamples = function(startDate, endDate, limiardB) {
     
     return new Promise(function(resolve, reject) {
         
         var timePickerData = {
             initialDate: moment(startDate).format('DD/MM/YYYY HH:mm:ss'), 
-            finalDate: moment(endDate).format('DD/MM/YYYY HH:mm:ss')
+            finalDate: moment(endDate).format('DD/MM/YYYY HH:mm:ss'),
+            limiardB: limiardB
         };
 
         $.ajax({

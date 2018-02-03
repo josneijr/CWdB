@@ -16,3 +16,7 @@ $('#radiusSlider').on('slide', function(sliderValue){
 $('#daterange').on('apply.daterangepicker', function(ev, picker) {          
     //RefreshPage();
 });  
+
+$('#applyButton').on('click', function(){
+    RefreshPage();
+})

@@ -14,14 +14,25 @@ function InitializeMapResources()
     };  
 }
 
+function ClearMapData()
+{
+    RemoveMarkers();
+    RemoveHeatMap();
+}
+
 function RemoveMarkers()
 {
+    markers.forEach(element => {
+        element.setMap(null);
+    });
+
     markers = [];
 }
 
 function RemoveHeatMap()
 {
-    heatmap.setMap(null);
+    if(heatmap!=null)
+        heatmap.setMap(null);
 }
 
 function CreateMarkers(mapData)
