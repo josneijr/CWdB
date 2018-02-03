@@ -118,8 +118,9 @@ app.post('/getInterval', function(req, res){
         .then(response => {
             res.json(response.map(t => t.get()));
         })
-        .catch({
-        })
+        .catch(
+            res.json("Erro:1")
+        )
 });
 
 //Pegar dados em um intervalo de data/hora
@@ -170,6 +171,14 @@ app.post('/getRegion', function(req, res){
         .catch({
         })
 });
+
+//Middleware para receber os dados do hardware
+app.post('/receiveTest', function(req, res){
+    //Os dados vem em formato JSON, portanto, podemos usar os componentes direto!
+    console.log('New TEST data arrived: ' + req.body.test);
+
+    res.sendStatus(200);
+})
 
 //Middleware para receber os dados do hardware
 app.post('/receiveData', function(req, res){

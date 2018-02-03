@@ -29,9 +29,9 @@
         <script type="text/javascript" src="analysis_updateScreen.js"></script>          
     </head>
 
-    <body class="hold-transition skin-blue layout-top-nav" onload="OnPageLoad()">
+    <body class="hold-transition skin-blue layout-top-nav">
         
-        <% include partials/header %>
+        <% include partials/header %> 
         
         <div class="row bg-navy text-filters">
             <div class="col-lg-3 col-lg-offset-1" style="padding-top: 15px">
@@ -77,8 +77,15 @@
         <div class="row">
 
             <div class="col-lg-6">
+
                 <!-- START: MAPA -->
                 <div id="map" class="col-xs-12"></div>
+                
+                <div class="title">
+                    <div class="alert alert-info alert-autocloseable-info">
+                        <strong>Não esqueça de clicar em aplicar após o ajuste de posição!</strong>
+                    </div>   
+                </div>
                 <!-- END: MAPA -->
             </div>
 
@@ -171,44 +178,6 @@
         </div>         
         
         <script src="admin-lte/js/bootstrap-slider.js"></script>   
-        
-              
-        <!-- SCRIPT: ESPECÍFICOS DA PÁGINA -->
-        <script>
-            function OnPageLoad() {
-                //Inicia o gráfico, ainda vazio
-                var graph2d = InitializeGraph();
-
-                //Update page
-                RefreshPage();                
-            };               
-            
-            var startDate = new Date();
-
-            startDate.setHours(startDate.getHours() - 24);
-
-            $('#daterange').daterangepicker({
-                timePicker: true,
-                timePicker24Hour: true,
-                timePickerIncrement: 1,
-                startDate: startDate,
-                endDate: new Date(),
-                locale: {
-                    format: 'DD/MM/YYYY HH:mm'
-                }
-            });
-            
-            $('#minDbSlider').slider({
-                formatter: function(value) {
-                }
-            });   
-
-            $('#radiusSlider').slider({
-                formatter: function(value) {
-                }
-            });               
-                    
-        </script>         
         
         <!-- SCRIPTS DO MAPA -->
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2NrBR3ZlTLNT0jFm8-FooJAKxTjPTRgs&callback=InitializeMapResources&libraries=visualization"></script>

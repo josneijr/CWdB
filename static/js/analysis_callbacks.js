@@ -1,7 +1,3 @@
-$('#minDbSlider').on('slideStop', function(sliderValue){
-    //RefreshPage();
-})
-
 $('#minDbSlider').on('slide', function(sliderValue){
     $('#minDbLabel').html(sliderValue.value + " dB"); 
 })
@@ -13,10 +9,18 @@ $('#radiusSlider').on('slide', function(sliderValue){
     $('#radiusLabel').html(sliderValue.value + " m"); 
 })
 
-$('#daterange').on('apply.daterangepicker', function(ev, picker) {          
-    //RefreshPage();
-});  
-
 $('#applyButton').on('click', function(){
-    RefreshPage();
-})
+    OnApply();
+});
+
+$(document).ready(function () {
+
+    $('#autoclosable-btn-info').prop("disabled", true);
+    $('.alert-autocloseable-info').show();
+
+    $('.alert-autocloseable-info').delay(4000).fadeOut( "slow", function() {
+        // Animation complete.
+        $('#autoclosable-btn-info').prop("disabled", false);
+    });
+
+});

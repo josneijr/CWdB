@@ -64,7 +64,9 @@ function DrawReffCircle(latLng){
         reffCircle.bindTo('center', reffMarker, 'position');
 
         google.maps.event.addListener(reffCircle, 'radius_changed', function() {
-            console.log('teste_raio: '+ reffCircle.getRadius());
+            $('#radiusSlider').slider('setValue', reffCircle.getRadius());
+
+            $('#radiusLabel').html(reffCircle.getRadius().toFixed(0) + " m"); 
         });              
     }
 
@@ -74,25 +76,3 @@ function DrawReffCircle(latLng){
 function MapClickCallback(mapElement){
     DrawReffCircle(mapElement.latLng);    
 }
-
-function TESTE(latitude, longitude){
-
-    console.log(latitude);
-    console.log(longitude);
-
-    $('#loading').show();
-
-    var drp = $('#daterange').data('daterangepicker');
-
-    GetServerTimeline(latitude, longitude, 100)
-        .then(function(samples){
-            console.log(samples.length);
-
-            $('#loading').hide();
-        })
-        .catch(function(errorMsg){
-            console.log(errorMsg);
-
-            $('#loading').hide();
-        })
-}                    

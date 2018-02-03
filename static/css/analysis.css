@@ -4,6 +4,25 @@ body {
     height: auto; 
 }
 
+.title {
+    position:absolute;
+    background: rgba(0,0,0,0);
+    color: white;
+    bottom: 10px;
+    width: 80%;
+    height: 35px;
+    text-align: center;
+    display: table;
+    margin-left: 10%;
+}
+
+.title div {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 10%;
+    font-size: 16px;
+}
+
 #map {
     height: 400px;
     width: 100%;
