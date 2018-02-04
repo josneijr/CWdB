@@ -197,15 +197,15 @@ app.post('/receiveData', function(req, res){
             console.log('value: ' + sample.value);
         }
 
-        var dt = moment(sample.timestamp, 'MM/DD/YYYY HH:mm:ss').toDate();
+        var dt = moment(sample.timestamp, ).toDate();
 
-        dt.setHours(dt.getHours-3);
+        dt.setHours(dt.getHours-2);
 
         //Save in DB
         Sample.sync({force: false}).then(() => {
             // Table created
             Sample.create({
-                data: moment(dt).format('YYYY-MM-DD HH:mm:ss'),
+                data: moment(sample.timestamp, 'MM/DD/YYYY HH:mm:ss').toDate(),
                 latitude: sample.lat,
                 longitude: sample.long,
                 amplitude: sample.value
