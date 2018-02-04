@@ -190,6 +190,9 @@
 
                 GetServerSamples(drp.startDate, drp.endDate, limiardB)
                     .then(function(samples){
+
+                        samples = samples.filter(t => t.amplitude!=null);
+
                         CreateMarkers(samples);
                         CreateHeatMap(samples);
 

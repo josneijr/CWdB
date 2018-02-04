@@ -1,5 +1,8 @@
 var map = null;
+var markers = [];
+var markersTest = null;
 var reffMarker = null;
+var iconRed = null;
 var iconBlue = null;
 var reffCircle = null;
 
@@ -14,6 +17,11 @@ function InitializeMapResources()
     }                
 
     map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+    iconRed = {
+        url: "marker_red.svg", // url
+        scaledSize: new google.maps.Size(40, 40) // scaled size
+    };
 
     iconBlue = {
         url: "marker_blue.svg", // url
@@ -49,6 +57,10 @@ function SetMapRadius(radiusSize){
 
 function DrawReffCircle(latLng){
     if(reffCircle == null){
+        google.maps.Circle.prototype.contains = function(latLng) {
+            return this.getBounds().contains(latLng) && google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
+        }   
+
         reffCircle = new google.maps.Circle({
             strokeColor: '#FF0000',
             strokeOpacity: 0.8,
@@ -59,7 +71,7 @@ function DrawReffCircle(latLng){
             radius: 300,
             editable: true,
             draggable: true
-          }); 
+          });        
 
         reffCircle.bindTo('center', reffMarker, 'position');
 
@@ -75,4 +87,47 @@ function DrawReffCircle(latLng){
 
 function MapClickCallback(mapElement){
     DrawReffCircle(mapElement.latLng);    
+}
+
+function FilterInsideRegion(samples){
+    return samples.filter(t => reffCircle.contains(new google.maps.LatLng(t.latitude, t.longitude)));
+}
+
+function FilterOutsideRegion(samples){
+    return samples.filter(t => !reffCircle.contains(new google.maps.LatLng(t.latitude, t.longitude)));
+}
+
+function PrintRegionMarkers(samplesInside, samplesOutside){
+    RemoveMarkers();
+
+    samplesInside.forEach(s => {
+        AddMarker(s.timestamp, s.latitude, s.longitude, s.amplitude, iconRed);
+    });    
+
+    samplesOutside.forEach(s => {
+        AddMarker(s.timestamp, s.latitude, s.longitude, s.amplitude, iconBlue);
+    });    
+}
+
+function AddMarker(timestamp, latitude, longitude, dB, image) {
+    var marker = new google.maps.Marker({
+        position: {lat: latitude, lng: longitude},
+        title: moment(timestamp).format('HH:mm:ss DD/MM/YYYY') + ' / ' + String(dB.toFixed(2)) + ' dB',
+        icon: image,
+        map: map
+    });   
+
+    markers.push(marker);    
+}
+
+function RemoveMarkers()
+{
+    if(markers.length==0)
+        return;
+
+    markers.forEach(element => {
+        element.setMap(null);
+    });
+
+    markers = [];
 }

@@ -123,8 +123,7 @@ app.post('/getInterval', function(req, res){
             res.json(response.map(t => t.get()));
         })
         .catch(function(e){
-            console.log("entrou no lugar errado");
-            //res.json("Erro:1")
+            res.json(e);
         })
     
     return;
@@ -151,10 +150,10 @@ app.post('/getRegion', function(req, res){
 
     var startTime = req.body.startTime;
     var finalTime = req.body.finalTime;
-    var latMin = req.body.latitude;
-    var latMax = req.body.longitude;
-    var lngMin = req.body.latitude;
-    var lngMax = req.body.longitude;    
+    var latMin = req.body.latMin;
+    var latMax = req.body.latMax;
+    var lngMin = req.body.lngMin;
+    var lngMax = req.body.lngMax;    
 
     Sample.findAll({ 
         where: {
@@ -173,9 +172,12 @@ app.post('/getRegion', function(req, res){
         } 
         })
         .then(response => {
+            console.log("Samples encontrados!");
+            console.log("Total: " + response.length);
             res.json(response.map(t => t.get()));
         })
-        .catch({
+        .catch(function(e){
+            res.json(e);
         })
 });
 

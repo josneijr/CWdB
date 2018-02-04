@@ -33,6 +33,7 @@ function PageInitialSet(){
 }
 
 function OnApply(){
+
     //Mostrar a tela de carregamento
     $('#loading').show();
 
@@ -85,21 +86,30 @@ function OnApply(){
         GetServerRegion(drp.startDate, drp.endDate, latMin, latMax, lngMin, lngMax)
             //Caso tudo tenha dado certo ao pegar os samples
             .then(function(samples){
-                //Imprime a quantidade de samples encontrada no intervalo solicitado
-                $('#totalSamples').html(samples.length.toString());
+                //Evita os valores NaN
+                samples = samples.filter(t => t.amplitude!=null);
 
-                console.log('Achei esses: ');
-                console.log(samples);
+                //Filtra pra ver quais REALMENTE estão no círculo
+                var samplesInside = FilterInsideRegion(samples);
+                var samplesOutside = FilterOutsideRegion(samples);
 
-                var belowLimiar = samples.filter(x => x.amplitude<dbLimiar);
-                var overLimiar = samples.filter(x => x.amplitude>=dbLimiar);            
+                console.log(samplesInside);
+
+                //Imprime em tela os samples que estão dentro da região
+                PrintRegionMarkers(samplesInside, []);
+
+                var belowLimiar = samplesInside.filter(x => x.amplitude<dbLimiar);
+                var overLimiar = samplesInside.filter(x => x.amplitude>=dbLimiar);            
 
                 $('#lowerThanVal').html(belowLimiar.length.toString());
                 $('#greaterThanVal').html(overLimiar.length.toString());  
                 
-                if(samples.length !== 0){
-                    $('#progressbarLower').width(100*(belowLimiar.length/samples.length) + '%');
-                    $('#progressbarGreater').width(100*(overLimiar.length/samples.length) + '%');
+                //Imprime a quantidade de samples encontrada no intervalo solicitado
+                $('#totalSamples').html(samplesInside.length.toString());
+
+                if(samplesInside.length !== 0){
+                    $('#progressbarLower').width(100*(belowLimiar.length/samplesInside.length) + '%');
+                    $('#progressbarGreater').width(100*(overLimiar.length/samplesInside.length) + '%');
                 }
                 else{
                     $('#progressbarLower').width(0);
@@ -107,20 +117,21 @@ function OnApply(){
                 }
 
                 //UpdateGraph(samples);
+
+                //Esconde a tela de carregamento
+                $('#loading').hide();                
             })
             //Caso algo tenha dado errado
             .catch(function(errorMsg){
                 //Loga o erro no console
                 console.log(errorMsg);
+
+                //Esconde a tela de carregamento
+                $('#loading').hide();                
             })    
     }
     catch(e){
-
-    }
-    finally{
-
-    }
-
         //Esconde a tela de carregamento
-        $('#loading').hide();    
+        $('#loading').hide();
+    }
 }

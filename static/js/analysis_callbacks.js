@@ -10,6 +10,9 @@ $('#radiusSlider').on('slide', function(sliderValue){
 })
 
 $('#applyButton').on('click', function(){
+    //Mostrar a tela de carregamento
+    $('#loading').show();    
+
     OnApply();
 });
 
