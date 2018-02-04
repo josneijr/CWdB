@@ -116,6 +116,9 @@ app.post('/getInterval', function(req, res){
         } 
         })
         .then(response => {
+            console.log("Samples encontrados!");
+            console.log("Total: " + response.length);
+
             res.json(response.map(t => t.get()));
         })
         .catch(
