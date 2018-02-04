@@ -121,6 +121,8 @@ app.post('/getInterval', function(req, res){
         .catch(
             res.json("Erro:1")
         )
+    
+    return;
 });
 
 //Pegar dados em um intervalo de data/hora
@@ -173,14 +175,6 @@ app.post('/getRegion', function(req, res){
 });
 
 //Middleware para receber os dados do hardware
-app.post('/receiveTest', function(req, res){
-    //Os dados vem em formato JSON, portanto, podemos usar os componentes direto!
-    console.log('New TEST data arrived: ' + req.body.test);
-
-    res.sendStatus(200);
-})
-
-//Middleware para receber os dados do hardware
 app.post('/receiveData', function(req, res){
 
     //Os dados vem em formato JSON, portanto, podemos usar os componentes direto!
@@ -188,9 +182,7 @@ app.post('/receiveData', function(req, res){
 
     var samples = req.body;
 
-    console.log(samples);    
-
-    console.log('NewData: ' + samples.length);
+    console.log('Number of arrived samples: ' + samples.length);
 
     samples.forEach(function(sample){
         //Checar se todas as propriedades estão no lugar
@@ -205,11 +197,15 @@ app.post('/receiveData', function(req, res){
             console.log('value: ' + sample.value);
         }
 
+        var dt = moment(sample.timestamp, 'MM/DD/YYYY HH:mm:ss').toDate();
+
+        dt.setHours(dt.getHours-3);
+
         //Save in DB
         Sample.sync({force: false}).then(() => {
             // Table created
             Sample.create({
-                data: moment(sample.timestamp, 'MM/DD/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'),
+                data: moment(dt).format('YYYY-MM-DD HH:mm:ss'),
                 latitude: sample.lat,
                 longitude: sample.long,
                 amplitude: sample.value
@@ -218,6 +214,7 @@ app.post('/receiveData', function(req, res){
     });
 
     res.send('ok');
+    return;
 });
 
 const CheckNewDataAttribute = (attributesNames, obj) => attributesNames.map(t => { 
