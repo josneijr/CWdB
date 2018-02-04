@@ -119,10 +119,11 @@ app.post('/getInterval', function(req, res){
             console.log("Samples encontrados!");
             console.log("Total: " + response.length);
 
-            res.json(response.map(t => t.get()));
+            res.sendStatus(200);
+            //res.json(response.map(t => t.get()));
         })
         .catch(
-            res.json("Erro:1")
+            //res.json("Erro:1")
         )
     
     return;
