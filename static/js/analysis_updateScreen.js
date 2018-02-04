@@ -1,13 +1,14 @@
 window.onload = 
 function PageInitialSet(){
     //Inicia o gráfico, ainda vazio
-    var graph2d = InitializeGraph();            
+    InitializeGraph();            
     
     var startDate = new Date();
 
     startDate.setHours(startDate.getHours() - 24);
 
     $('#minDbSlider').slider({
+        id: "sliderDB",
         formatter: function(value) {
         }
     });   
@@ -93,11 +94,6 @@ function OnApply(){
                 var samplesInside = FilterInsideRegion(samples);
                 var samplesOutside = FilterOutsideRegion(samples);
 
-                console.log(samplesInside);
-
-                //Imprime em tela os samples que estão dentro da região
-                PrintRegionMarkers(samplesInside, []);
-
                 var belowLimiar = samplesInside.filter(x => x.amplitude<dbLimiar);
                 var overLimiar = samplesInside.filter(x => x.amplitude>=dbLimiar);            
 
@@ -116,7 +112,11 @@ function OnApply(){
                     $('#progressbarGreater').width(0);
                 }
 
-                //UpdateGraph(samples);
+                //Imprime em tela os samples que estão dentro da região
+                PrintRegionMarkers(belowLimiar, overLimiar);
+
+                //Imprime os dados no gráfico
+                UpdateGraph(belowLimiar);
 
                 //Esconde a tela de carregamento
                 $('#loading').hide();                

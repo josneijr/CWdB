@@ -23,6 +23,11 @@ function InitializeMapResources()
         scaledSize: new google.maps.Size(40, 40) // scaled size
     };
 
+    iconGreen = {
+        url: "marker_green.svg", // url
+        scaledSize: new google.maps.Size(40, 40) // scaled size
+    };
+
     iconBlue = {
         url: "marker_blue.svg", // url
         scaledSize: new google.maps.Size(40, 40) // scaled size
@@ -62,10 +67,10 @@ function DrawReffCircle(latLng){
         }   
 
         reffCircle = new google.maps.Circle({
-            strokeColor: '#FF0000',
+            strokeColor: '#7070ff',
             strokeOpacity: 0.8,
             strokeWeight: 2,
-            fillColor: '#FF0000',
+            fillColor: '#7070ff',
             fillOpacity: 0.35,
             map: map,
             radius: 300,
@@ -97,15 +102,15 @@ function FilterOutsideRegion(samples){
     return samples.filter(t => !reffCircle.contains(new google.maps.LatLng(t.latitude, t.longitude)));
 }
 
-function PrintRegionMarkers(samplesInside, samplesOutside){
+function PrintRegionMarkers(samplesOverLimiar, samplesLowerLimiar){
     RemoveMarkers();
 
-    samplesInside.forEach(s => {
+    samplesOverLimiar.forEach(s => {
         AddMarker(s.timestamp, s.latitude, s.longitude, s.amplitude, iconRed);
     });    
 
-    samplesOutside.forEach(s => {
-        AddMarker(s.timestamp, s.latitude, s.longitude, s.amplitude, iconBlue);
+    samplesLowerLimiar.forEach(s => {
+        AddMarker(s.timestamp, s.latitude, s.longitude, s.amplitude, iconGreen);
     });    
 }
 
