@@ -33,5 +33,6 @@ $('#slider_dB').on('slide', function(sliderValue){
 });
 
 $('#slider_dB').on('slideStop', function(sliderValue){
+    $('#sliderValue').html("min " + sliderValue.value + " dB"); 
     UpdateSamples();
 });

@@ -2,12 +2,23 @@ $('#minDbSlider').on('slide', function(sliderValue){
     $('#minDbLabel').html(sliderValue.value + " dB"); 
 })
 
+$('#minDbSlider').on('slideStop', function(sliderValue){
+    $('#minDbLabel').html(sliderValue.value + " dB"); 
+});
+
 $('#radiusSlider').on('slide', function(sliderValue){
     
     reffCircle.setRadius(sliderValue.value);
 
     $('#radiusLabel').html(sliderValue.value + " m"); 
 })
+
+$('#radiusSlider').on('slideStop', function(sliderValue){
+
+    reffCircle.setRadius(sliderValue.value);
+
+    $('#radiusLabel').html(sliderValue.value + " m"); 
+});
 
 $('#applyButton').on('click', function(){
     //Mostrar a tela de carregamento
