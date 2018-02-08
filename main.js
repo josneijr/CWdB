@@ -204,6 +204,17 @@ app.post('/receiveData', function(req, res){
             console.log('value: ' + sample.value);
         }
 
+        if(sample.lat==0 || sample.long==0)
+        {
+            console.log("SAMPLE SEM GPS!");
+            return;
+        }
+        else if(isNan(sample.value))
+        {
+            console.log("Amplitude inválida");
+            return;
+        }
+
         var dt = moment(sample.timestamp, ).toDate();
 
         dt.setHours(dt.getHours-2);
